@@ -1,0 +1,84 @@
+# visualize.py
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import plotly.express as px
+
+
+# Гистограмма "Распределение студентов по академическому уровню"
+def barplot_academic_lvls(academic_levels):
+  x_values = [row[0] for row in academic_levels]
+  y_values = [row[1] for row in academic_levels]
+  sns.barplot(x=x_values, y=y_values, palette='viridis')
+  plt.title('Гистограмма "Распределение студентов по академическому уровню"', fontsize=14)
+  plt.xlabel('Академический уровень', fontsize=12)
+  plt.ylabel('Количество студентов', fontsize=12)
+  plt.xticks(rotation=45, ha='right')
+  plt.tight_layout()
+  plt.show()
+  return
+
+# Гистограмма "Часто используемые социальные платформы"
+def barplot_platforms(platforms):
+  x_values = [row[0] for row in platforms]
+  y_values = [row[1] for row in platforms]
+  sns.barplot(x=x_values, y=y_values, palette='viridis')
+  plt.title('Гистограмма "Часто используемые соц. платформы/сети"', fontsize=12)
+  plt.xlabel('Название платформы', fontsize=10)
+  plt.ylabel('Количество студентов, использующих платформу', fontsize=10)
+  plt.xticks(rotation=45, ha='right')
+  plt.tight_layout()
+  plt.show()
+  return
+
+# Использование платформ по гендеру
+def boxplot_gender_use_hrs(gender_use_hours):
+  x_values = [row[0] for row in gender_use_hours]
+  y_values = [row[1] for row in gender_use_hours]
+  sns.boxplot(x=x_values, y=y_values)
+  plt.title('Использование студентами соц. платформ/сетей', fontsize=12)
+  plt.xlabel('Пол', fontsize=10)
+  plt.ylabel('Среднее время (ч) пользования платформой', fontsize=10)
+  plt.tight_layout()
+  plt.show()
+  return
+
+# Оценка влияния времени использования платформы в зависимости от статуса отношений
+def boxplot_relationship_use_hrs(relationship_use_hours):
+  x_values = [row[0] for row in relationship_use_hours]
+  y_values = [row[1] for row in relationship_use_hours]
+  sns.boxplot(x=x_values, y=y_values)
+  plt.title('Оценка влияния t использования платформы/сети в зависимости от статуса отношений', fontsize=12)
+  plt.xlabel('Статус отношений', fontsize=10)
+  plt.ylabel('Среднее время пользования сетью', fontsize=10)
+  plt.tight_layout()
+  plt.show()
+  return
+
+# Влияние отношений на возникновение конфликтов из-за соцсетей
+def barplot_relationship_conflict(relationship_conflict):
+  x_values = [row[0] for row in relationship_conflict]
+  y_values = [row[1] for row in relationship_conflict]
+  sns.barplot(x=x_values, y=y_values, palette='viridis')
+  plt.title('Влияние отношений на возникновение конфликтов из-за соцсетей', fontsize=12)
+  plt.xlabel('Статус отношений', fontsize=10)
+  plt.ylabel('Оценка возникновения конфликтов (0-10)', fontsize=10)
+  plt.xticks(rotation=45, ha='right')
+  plt.tight_layout()
+  plt.show()
+  return
+
+# матрица корреляций
+def correlation_matrix(data_matrix):
+  correlation_data = data_matrix[['Age', 'Avg_Daily_Usage_Hours', 'Sleep_Hours_Per_Night', 'Mental_Health_Score', 'Conflicts_Over_Social_Media', 'Addicted_Score']].corr()
+  fig = px.imshow(correlation_data,
+                  text_auto=True,
+                  aspect="auto",
+                  color_continuous_scale='viridis')
+  fig.update_layout(
+      title='Матрица корреляции основных значений',
+      width=800,
+      height=700
+  )
+  fig.show()
+  return

@@ -1,0 +1,125 @@
+# db_module.py
+import sqlite3
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+import plotly.express as px
+
+# установка соединения с БД
+def connect_db(db_name):
+  try:
+    conn = sqlite3.connect(db_name)
+    print (f"Подключено к БД: {db_name}")
+    return conn
+  except sqlite3.Error as e:
+    print (f"Ошибка при установлении соединения с БД: {db_name}")
+    return None
+
+def show_platform(conn):
+  if conn is None:
+    print (f"Соединенис с БД отсутствует.")
+    return None
+
+  cursor = conn.cursor()
+  query = """
+    SELECT Most_Used_Platform, COUNT(*)
+    FROM additions
+    GROUP BY Most_Used_Platform
+    ORDER BY COUNT(*) DESC;
+  """
+  cursor.execute(query)
+  results = cursor.fetchall()
+  cursor.close()
+  return results
+
+def show_avg_sleep_hours(conn):
+  if conn is None:
+    print (f"Соединенис с БД отсутствует.")
+    return None
+  cursor = conn.cursor()
+  query = """
+    SELECT AVG(Sleep_Hours_Per_Night)
+    FROM additions;
+  """
+  cursor.execute(query)
+  results = cursor.fetchall()
+  cursor.close()
+  return results
+
+def show_academic_level(conn):
+   if conn is None:
+    print (f"Соединенис с БД отсутствует.")
+    return None
+   cursor = conn.cursor()
+   query = """
+      SELECT Academic_Level, COUNT(*)
+      FROM additions
+      GROUP BY Academic_Level
+      ORDER BY COUNT(*);
+    """
+   cursor.execute(query)
+   results = cursor.fetchall()
+   cursor.close()
+   return results
+
+def show_gender_use_hours(conn):
+  if conn is None:
+    print (f"Соединенис с БД отсутствует.")
+    return None
+
+  cursor = conn.cursor()
+  query = """
+      SELECT Gender, Avg_Daily_Usage_Hours
+      FROM additions
+      ORDER BY Gender;
+    """
+  cursor.execute(query)
+  results = cursor.fetchall()
+  cursor.close()
+  return results
+
+def show_relationship_use_hours(conn):
+  if conn is None:
+    print (f"Соединенис с БД отсутствует.")
+    return None
+  cursor = conn.cursor()
+  query = """
+      SELECT Relationship_Status, Avg_Daily_Usage_Hours
+      FROM additions
+      ORDER BY Relationship_Status;
+    """
+  cursor.execute(query)
+  results = cursor.fetchall()
+  cursor.close()
+  return results
+
+def show_relationship_conflict(conn):
+  if conn is None:
+    print (f"Соединенис с БД отсутствует.")
+    return None
+  cursor = conn.cursor()
+  query = """
+      SELECT Relationship_Status, Conflicts_Over_Social_Media
+      FROM additions
+      ORDER BY Relationship_Status;
+    """
+  cursor.execute(query)
+  results = cursor.fetchall()
+  cursor.close()
+  return results
+
+def get_data_matrix(conn):
+  if conn is None:
+    print (f"Соединенис с БД отсутствует.")
+    return None
+  cursor = conn.cursor()
+  query = """
+      SELECT Age, Avg_Daily_Usage_Hours, Sleep_Hours_Per_Night, Mental_Health_Score, Conflicts_Over_Social_Media, Addicted_Score
+      FROM additions;
+    """
+  cursor.execute(query)
+  results = cursor.fetchall()
+  columns = [desc[0] for desc in cursor.description]
+  df = pd.DataFrame(results, columns=columns)
+  cursor.close()
+  return df
